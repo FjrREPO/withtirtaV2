@@ -183,7 +183,7 @@ export default function NavMenu() {
             </MagneticEffect>
             <SignedIn>
               <Link
-                href={"/dashboard"}
+                href={"/admin"}
                 className={"group"}
               >
                 <MagneticEffect>
