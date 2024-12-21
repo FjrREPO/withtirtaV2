@@ -23,7 +23,7 @@ export default function Contact() {
                 Github
               </p>
               <Link
-                href="https://github.com/aafrzl"
+                href=""
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Github Link"
@@ -39,21 +39,21 @@ export default function Contact() {
               </p>
               <div className="flex items-center gap-x-2">
                 <ContactLink
-                  href="https://instagram.com/aafrzl_"
+                  href=""
                   label="Instagram"
                   icon={
                     <InstagramIcon className="text-zinc-200 dark:text-zinc-800" />
                   }
                 />
                 <ContactLink
-                  href="mailto:afrizal.mufriz25@gmail.com"
+                  href=""
                   label="Email"
                   icon={
                     <MailIcon className="text-zinc-200 dark:text-zinc-800" />
                   }
                 />
                 <ContactLink
-                  href="https://www.linkedin.com/in/afrizal-mufriz-fouji-8a930111b/"
+                  href="#"
                   label="LinkedIn"
                   icon={
                     <LinkedinIcon className="text-zinc-200 dark:text-zinc-800" />

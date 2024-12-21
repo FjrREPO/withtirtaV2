@@ -8,7 +8,7 @@ export const projects = [
     image: "/images/project-1.png",
     tech: ["React", "TypeScript", "Next.js", "TailwindCSS"],
     linkProject: "https://google.com",
-    repo: "https://github.com/aafrzl",
+    repo: "",
   },
   {
     id: 2,
@@ -19,7 +19,7 @@ export const projects = [
     image: "/images/project-2.png",
     tech: ["React", "TypeScript", "Next.js", "TailwindCSS"],
     linkProject: "https://google.com",
-    repo: "https://github.com/aafrzl",
+    repo: "",
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ export const projects = [
     image: "/images/project-3.png",
     tech: ["React", "TypeScript", "Next.js", "TailwindCSS"],
     linkProject: "https://google.com",
-    repo: "https://github.com/aafrzl",
+    repo: "",
   },
   {
     id: 4,
@@ -41,6 +41,6 @@ export const projects = [
     image: "/images/project-4.png",
     tech: ["React", "TypeScript", "Next.js", "TailwindCSS"],
     linkProject: "https://google.com",
-    repo: "https://github.com/aafrzl",
+    repo: "",
   },
 ]
