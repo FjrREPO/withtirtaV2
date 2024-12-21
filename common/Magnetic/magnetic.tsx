@@ -25,6 +25,6 @@ export const Magnetic = ({ children }: { children: React.ReactElement }) => {
     }, [])
 
     return (
-        React.cloneElement(children, { ref: magnetic })
+        React.cloneElement(children as React.ReactElement<any>, { ref: magnetic })
     )
 }

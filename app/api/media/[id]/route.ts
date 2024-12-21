@@ -14,14 +14,14 @@ export async function PUT(
   try {
     const params = await props.params;
     const json = await request.json();
-    const category = await prisma.category.update({
+    const mediaItem = await prisma.mediaItem.update({
       where: { id: params.id },
       data: json,
     });
-    return NextResponse.json(category);
+    return NextResponse.json(mediaItem);
   } catch (error) {
     return NextResponse.json(
-      { error: "Error updating category" },
+      { error: "Error updating mediaItem" },
       { status: 500 }
     );
   }
@@ -33,13 +33,13 @@ export async function DELETE(
 ) {
   try {
     const params = await props.params;
-    await prisma.category.delete({
+    await prisma.mediaItem.delete({
       where: { id: params.id },
     });
-    return NextResponse.json({ message: "Category deleted" });
+    return NextResponse.json({ message: "mediaItem deleted" });
   } catch (error) {
     return NextResponse.json(
-      { error: "Error deleting category" },
+      { error: "Error deleting mediaItem" },
       { status: 500 }
     );
   }

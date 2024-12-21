@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useEffect, useState } from "react"
+import type LocomotiveScroll from "locomotive-scroll"
 
 export const SmoothScrollContext = createContext({
   scroll: null as LocomotiveScroll | null,
