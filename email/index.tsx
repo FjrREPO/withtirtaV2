@@ -25,8 +25,7 @@ export default function ContactEmail({
   subject,
   message,
 }: ContactEmailProps) {
-  // const baseUrl = "https://withtirta.vercel.app"
-  const baseUrl = "http://localhost:3000"
+  const baseUrl = "https://withtirta.vercel.app"
 
   return (
     <Html>
