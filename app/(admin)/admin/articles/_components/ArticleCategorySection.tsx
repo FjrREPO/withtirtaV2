@@ -201,7 +201,7 @@ export default function ArticleCategorySection({ categories, onDataChange }: Art
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Category</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{deleteCategory?.name}"? This action cannot be undone.
+              Are you sure you want to delete &quot;{deleteCategory?.name}&quot;? This action cannot be undone.
               {deleteCategory?.articles?.length ? (
                 <p className="mt-2 text-red-500">
                   Warning: This category contains {deleteCategory.articles.length} articles.
