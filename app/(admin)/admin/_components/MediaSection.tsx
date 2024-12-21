@@ -16,12 +16,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { MediaType } from "@prisma/client";
 import { toast } from 'sonner';
 import FileUpload from '@/components/upload/file-upload';
 import { Pencil, Trash2 } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface Category {
   id: string;
@@ -57,6 +65,7 @@ export default function MediaSection({ mediaItems, categories, onDataChange }: M
   });
 
   const [editingItem, setEditingItem] = useState<MediaItem | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const addMediaItem = async () => {
     try {
@@ -78,15 +87,18 @@ export default function MediaSection({ mediaItems, categories, onDataChange }: M
     }
   };
 
-  const updateMediaItem = async (id: string) => {
+  const updateMediaItem = async () => {
+    if (!editingItem) return;
+
     try {
-      await fetch(`/api/media/${id}`, {
+      await fetch(`/api/media/${editingItem.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editingItem),
       });
       toast.success('Media item updated successfully');
       setEditingItem(null);
+      setIsEditDialogOpen(false);
       onDataChange();
     } catch (error) {
       toast.error('Failed to update media item');
@@ -101,6 +113,11 @@ export default function MediaSection({ mediaItems, categories, onDataChange }: M
     } catch (error) {
       toast.error('Failed to delete media item');
     }
+  };
+
+  const handleEdit = (item: MediaItem) => {
+    setEditingItem(item);
+    setIsEditDialogOpen(true);
   };
 
   return (
@@ -145,6 +162,73 @@ export default function MediaSection({ mediaItems, categories, onDataChange }: M
         <Button onClick={addMediaItem}>Add Media Item</Button>
       </div>
 
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Edit Media Item</DialogTitle>
+          </DialogHeader>
+          {editingItem && (
+            <div className="grid gap-4 py-4">
+              <Input
+                value={editingItem.name}
+                onChange={(e) => setEditingItem({
+                  ...editingItem,
+                  name: e.target.value
+                })}
+                placeholder="Media name"
+              />
+              <Select
+                value={editingItem.type}
+                onValueChange={(value) => setEditingItem({
+                  ...editingItem,
+                  type: value as MediaType
+                })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={MediaType.PHOTO}>Photo</SelectItem>
+                  <SelectItem value={MediaType.VIDEO}>Video</SelectItem>
+                </SelectContent>
+              </Select>
+              <FileUpload
+                value={editingItem.filePath}
+                onChange={(url) => setEditingItem({
+                  ...editingItem,
+                  filePath: url
+                })}
+                accept={editingItem.type === MediaType.PHOTO ? "image/*" : "video/*"}
+              />
+              <Select
+                value={editingItem.categoryId}
+                onValueChange={(value) => setEditingItem({
+                  ...editingItem,
+                  categoryId: value
+                })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={updateMediaItem}>Save changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Table>
         <TableHeader>
           <TableRow>
@@ -158,118 +242,50 @@ export default function MediaSection({ mediaItems, categories, onDataChange }: M
         <TableBody>
           {mediaItems.map((item) => (
             <TableRow key={item.id}>
+              <TableCell>{item.name}</TableCell>
+              <TableCell>{item.type}</TableCell>
+              <TableCell>{item.category.name}</TableCell>
               <TableCell>
-                {editingItem?.id === item.id ? (
-                  <Input
-                    value={editingItem.name}
-                    onChange={(e) => setEditingItem({
-                      ...editingItem,
-                      name: e.target.value
-                    })}
-                  />
-                ) : (
-                  item.name
-                )}
-              </TableCell>
-              <TableCell>
-                {editingItem?.id === item.id ? (
-                  <Select
-                    value={editingItem.type}
-                    onValueChange={(value) => setEditingItem({
-                      ...editingItem,
-                      type: value as MediaType
-                    })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={MediaType.PHOTO}>Photo</SelectItem>
-                      <SelectItem value={MediaType.VIDEO}>Video</SelectItem>
-                    </SelectContent>
-                  </Select>
-                ) : (
-                  item.type
-                )}
-              </TableCell>
-              <TableCell>
-                {editingItem?.id === item.id ? (
-                  <Select
-                    value={editingItem.categoryId}
-                    onValueChange={(value) => setEditingItem({
-                      ...editingItem,
-                      categoryId: value
-                    })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                ) : (
-                  item.category.name
-                )}
-              </TableCell>
-              <TableCell>
-                <div className='flex flex-row gap-2 items-center'>
+                <Link href={item.filePath} target='_blank' className="flex flex-row gap-2 items-center">
                   <Image
                     src={item.filePath}
                     alt={item.name}
                     width={50}
                     height={50}
-                    className='aspect-square object-cover rounded-2xl'
+                    className="aspect-square object-cover rounded-2xl"
                   />
-                  <p className='break-all max-w-[250px]'>{item.filePath}</p>
-                </div>
+                  <p className="break-all max-w-[250px] md:block hidden">{item.filePath}</p>
+                </Link>
               </TableCell>
               <TableCell className="flex gap-2">
-                {editingItem?.id === item.id ? (
-                  <>
-                    <Button onClick={() => updateMediaItem(item.id)}>
-                      Save
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => handleEdit(item)}
+                >
+                  <Pencil className="h-4 w-4" />
+                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" size="icon">
+                      <Trash2 className="h-4 w-4" />
                     </Button>
-                    <Button variant="secondary" onClick={() => setEditingItem(null)}>
-                      Cancel
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => setEditingItem(item)}
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant="destructive" size="icon">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Delete Media Item</AlertDialogTitle>
-                        </AlertDialogHeader>
-                        <AlertDialogDescription>
-                          Are you sure you want to delete this media item?
-                        </AlertDialogDescription>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => deleteMediaItem(item.id)}>
-                            Delete
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </>
-                )}
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete Media Item</AlertDialogTitle>
+                    </AlertDialogHeader>
+                    <AlertDialogDescription>
+                      Are you sure you want to delete this media item?
+                    </AlertDialogDescription>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => deleteMediaItem(item.id)}>
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </TableCell>
             </TableRow>
           ))}
