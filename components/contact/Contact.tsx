@@ -1,4 +1,4 @@
-import { GithubIcon, InstagramIcon, LinkedinIcon, MailIcon } from "lucide-react"
+import { InstagramIcon, LinkedinIcon, MailIcon, Twitter } from "lucide-react"
 import Link from "next/link"
 import MagneticEffect from "../providers/MagneticEffect"
 import ContactLink from "./ContactLink"
@@ -20,16 +20,16 @@ export default function Contact() {
           <div className="flex w-full justify-between py-12">
             <div>
               <p className="mb-4 text-xl font-semibold text-zinc-200 dark:text-zinc-800">
-                Github
+                Twitter
               </p>
               <Link
-                href=""
+                href="https://x.com/senchou21"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Github Link"
               >
                 <MagneticEffect>
-                  <GithubIcon className="h-8 w-8 text-zinc-100 dark:text-zinc-800" />
+                  <Twitter className="h-8 w-8 text-zinc-100 dark:text-zinc-800" />
                 </MagneticEffect>
               </Link>
             </div>
@@ -39,21 +39,21 @@ export default function Contact() {
               </p>
               <div className="flex items-center gap-x-2">
                 <ContactLink
-                  href=""
+                  href="https://www.instagram.com/withtirta/"
                   label="Instagram"
                   icon={
                     <InstagramIcon className="text-zinc-200 dark:text-zinc-800" />
                   }
                 />
                 <ContactLink
-                  href=""
+                  href="mailto:auliaikhsantirta@gmail.com"
                   label="Email"
                   icon={
                     <MailIcon className="text-zinc-200 dark:text-zinc-800" />
                   }
                 />
                 <ContactLink
-                  href="#"
+                  href="https://www.linkedin.com/in/aulia-ikhsan-tirta-793b26206/"
                   label="LinkedIn"
                   icon={
                     <LinkedinIcon className="text-zinc-200 dark:text-zinc-800" />
