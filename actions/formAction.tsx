@@ -21,7 +21,7 @@ export const formSubmission = async (prevState: any, formData: FormData) => {
   if (!subject) errors.subject = true
 
   if (!errors.email && !errors.name && !errors.message) {
-    const host = headers().get("host")
+    const host = (await headers()).get("host")
     const protocol = process?.env.NODE_ENV === "development" ? "http" : "https"
     const url = `${protocol}://${host}/api/contact`
 

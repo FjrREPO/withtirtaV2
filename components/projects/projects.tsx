@@ -7,12 +7,7 @@ import { motion } from "framer-motion";
 import gsap from "gsap";
 import Image from "next/image";
 import { RoundedButton } from "../../common/RoundedButton/rounded-button";
-
-interface ProjectType {
-  title: string;
-  src: string;
-  color: string;
-}
+import { MediaItem } from "@prisma/client";
 
 interface ModalState {
   active: boolean;
@@ -22,29 +17,6 @@ interface ModalState {
 interface GSAPAnimation {
   (value: number): void;
 }
-
-const projects: ProjectType[] = [
-  {
-    title: "Contoh 1",
-    src: "background.jpg",
-    color: "#000000"
-  },
-  {
-    title: "Contoh 2",
-    src: "background.jpg",
-    color: "#8C8C8C"
-  },
-  {
-    title: "Contoh 3",
-    src: "background.jpg",
-    color: "#EFE8D3"
-  },
-  {
-    title: "Contoh 4",
-    src: "background.jpg",
-    color: "#706D63"
-  }
-];
 
 const scaleAnimation = {
   initial: { scale: 0, x: "-50%", y: "-50%" },
@@ -76,6 +48,24 @@ export const Projects: React.FC = () => {
   const yMoveCursor = useRef<GSAPAnimation | null>(null);
   const xMoveCursorLabel = useRef<GSAPAnimation | null>(null);
   const yMoveCursorLabel = useRef<GSAPAnimation | null>(null);
+
+    const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
+    
+    const refreshData = async () => {
+      const [mediaRes] = await Promise.all([
+        fetch('/api/media')
+      ]);
+      
+      const [mediaData] = await Promise.all([
+        mediaRes.json()
+      ]);
+      
+      setMediaItems(mediaData);
+    };
+  
+    useEffect(() => {
+      refreshData();
+    }, []);
 
   useEffect(() => {
     if (!modalContainer.current || !cursor.current || !cursorLabel.current) return;
@@ -142,10 +132,10 @@ export const Projects: React.FC = () => {
       className={styles.projects}
     >
       <div className={styles.body}>
-        {projects.map((project, index) => (
+        {mediaItems.slice(0, 5).map((project, index) => (
           <Project
             index={index}
-            title={project.title}
+            title={project.name}
             manageModal={manageModal}
             key={index}
           />
@@ -168,19 +158,23 @@ export const Projects: React.FC = () => {
             style={{ top: `${index * -100}%` }}
             className={styles.modalSlider}
           >
-            {projects.map((project, index) => {
-              const { src, color } = project;
+            {mediaItems.slice(0, 5).map((project, index) => {
+              const generateRandomHexColor = (): string => {
+                return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+              };
+
               return (
                 <div
                   className={styles.modal}
-                  style={{ backgroundColor: color }}
+                  style={{ backgroundColor: generateRandomHexColor() }}
                   key={`modal_${index}`}
                 >
                   <Image
-                    src={`/images/${src}`}
+                    src={project.filePath}
                     width={300}
                     height={0}
                     alt="image"
+                    className="aspect-square object-cover"
                   />
                 </div>
               );
