@@ -139,7 +139,7 @@ export default function NavMenu() {
                 active={active}
                 classes="pr-6"
                 duration={1.2}
-                link=""
+                link="https://www.linkedin.com/in/aulia-ikhsan-tirta-793b26206/"
               />
             </MagneticEffect>
             <MagneticEffect>
@@ -148,7 +148,7 @@ export default function NavMenu() {
                 active={active}
                 classes="pr-6"
                 duration={1.4}
-                link=""
+                link="https://www.instagram.com/withtirta/"
               />
             </MagneticEffect>
             <MagneticEffect>
@@ -157,7 +157,7 @@ export default function NavMenu() {
                 active={active}
                 classes="pr-6"
                 duration={1.6}
-                link=""
+                link="https://www.tiktok.com/@withtirta"
               />
             </MagneticEffect>
             <MagneticEffect>
@@ -166,7 +166,7 @@ export default function NavMenu() {
                 active={active}
                 classes="pr-6"
                 duration={1.8}
-                link=""
+                link="mailto:auliaikhsantirta@gmail.com"
               />
             </MagneticEffect>
             <MagneticEffect>
