@@ -195,6 +195,7 @@ export const Projects: React.FC = () => {
           variants={scaleAnimation}
           initial="initial"
           animate={active ? "enter" : "closed"}
+          onClick={() => window.location.href == "https://drive.google.com/drive/folders/16_pvWsvS-Mt6dtsfkYlGOKbc7Ua1rEnO?usp=sharing"}
         >
           View
         </motion.div>
