@@ -8,6 +8,7 @@ import gsap from "gsap";
 import Image from "next/image";
 import { RoundedButton } from "../../common/RoundedButton/rounded-button";
 import { MediaItem } from "@prisma/client";
+import Link from "next/link";
 
 interface ModalState {
   active: boolean;
@@ -141,11 +142,11 @@ export const Projects: React.FC = () => {
           />
         ))}
       </div>
-      <div className="mb-20">
+      <Link className="mb-20" href={"https://drive.google.com/drive/folders/16_pvWsvS-Mt6dtsfkYlGOKbc7Ua1rEnO?usp=sharing"} target="_blank">
         <RoundedButton>
           <p>More work</p>
         </RoundedButton>
-      </div>
+      </Link>
       <>
         <motion.div
           ref={modalContainer}
