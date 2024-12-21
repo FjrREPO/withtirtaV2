@@ -10,6 +10,7 @@ import MediaSection from './MediaSection';
 interface Category {
   id: string;
   name: string;
+  drivePath: string;
   mediaItems: MediaItem[];
 }
 
@@ -62,7 +63,7 @@ export default function MediaManagement() {
         
         <TabsContent value="media">
           <MediaSection
-            mediaItems={mediaItems}
+            mediaItems={mediaItems || []}
             categories={categories}
             onDataChange={refreshData}
           />

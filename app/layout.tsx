@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
 import { Syne, Work_Sans } from "next/font/google"
 import "./globals.css"
+import { TanstackProvider } from "@/components/providers/TanstackProvider"
 
 const font = Work_Sans({ subsets: ["latin"] })
 const syne = Syne({
@@ -36,26 +37,28 @@ export default function RootLayout({
             syne.className
           )}
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            storageKey="theme-mode"
-          >
-            <SmoothScrollProvider
-              options={{
-                smooth: true,
-                mobile: {
-                  smooth: true,
-                },
-                tablet: {
-                  smooth: true,
-                },
-              }}
+          <TanstackProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              storageKey="theme-mode"
             >
-              {children}
-            </SmoothScrollProvider>
-          </ThemeProvider>
+              <SmoothScrollProvider
+                options={{
+                  smooth: true,
+                  mobile: {
+                    smooth: true,
+                  },
+                  tablet: {
+                    smooth: true,
+                  },
+                }}
+              >
+                {children}
+              </SmoothScrollProvider>
+            </ThemeProvider>
+          </TanstackProvider>
         </body>
       </html>
     </ClerkProvider>

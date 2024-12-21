@@ -34,6 +34,7 @@ import Link from 'next/link';
 interface Category {
   id: string;
   name: string;
+  drivePath: string;
 }
 
 interface MediaItem {
@@ -152,7 +153,7 @@ export default function MediaSection({ mediaItems, categories, onDataChange }: M
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
           <SelectContent>
-            {categories.map((category) => (
+            {categories && categories.length > 0 && categories.map((category) => (
               <SelectItem key={category.id} value={category.id}>
                 {category.name}
               </SelectItem>
@@ -211,7 +212,7 @@ export default function MediaSection({ mediaItems, categories, onDataChange }: M
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((category) => (
+                  {categories && categories.length > 0 && categories.map((category) => (
                     <SelectItem key={category.id} value={category.id}>
                       {category.name}
                     </SelectItem>
@@ -240,7 +241,7 @@ export default function MediaSection({ mediaItems, categories, onDataChange }: M
           </TableRow>
         </TableHeader>
         <TableBody>
-          {mediaItems.map((item) => (
+          {mediaItems && mediaItems.length > 0 && mediaItems.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.name}</TableCell>
               <TableCell>{item.type}</TableCell>

@@ -14,7 +14,7 @@ export async function PUT(
   try {
     const params = await props.params;
     const json = await request.json();
-    const category = await prisma.category.update({
+    const category = await prisma.articleCategory.update({
       where: { id: params.id },
       data: json,
     });
@@ -33,7 +33,7 @@ export async function DELETE(
 ) {
   try {
     const params = await props.params;
-    await prisma.category.delete({
+    await prisma.articleCategory.delete({
       where: { id: params.id },
     });
     return NextResponse.json({ message: "Category deleted" });

@@ -16,6 +16,7 @@ import { Pencil, Trash2 } from 'lucide-react';
 interface Category {
   id: string;
   name: string;
+  drivePath: string;
   mediaItems: any[];
 }
 
@@ -26,6 +27,7 @@ interface CategoriesSectionProps {
 
 export default function CategoriesSection({ categories, onDataChange }: CategoriesSectionProps) {
   const [newCategory, setNewCategory] = useState("");
+  const [drivePath, setDrivePath] = useState("");
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
 
   const addCategory = async () => {
@@ -33,10 +35,11 @@ export default function CategoriesSection({ categories, onDataChange }: Categori
       await fetch('/api/categories', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newCategory }),
+        body: JSON.stringify({ name: newCategory, drivePath: drivePath }),
       });
       toast.success('Category added successfully');
       setNewCategory("");
+      setDrivePath("");
       onDataChange();
     } catch (error) {
       toast.error('Failed to add category');
@@ -76,6 +79,11 @@ export default function CategoriesSection({ categories, onDataChange }: Categori
           onChange={(e) => setNewCategory(e.target.value)}
           placeholder="Category name"
         />
+        <Input
+          value={drivePath}
+          onChange={(e) => setDrivePath(e.target.value)}
+          placeholder="Drive path"
+        />
         <Button onClick={addCategory}>Add Category</Button>
       </div>
 
@@ -88,7 +96,7 @@ export default function CategoriesSection({ categories, onDataChange }: Categori
           </TableRow>
         </TableHeader>
         <TableBody>
-          {categories.map((category) => (
+          {categories && categories.length > 0 && categories.map((category) => (
             <TableRow key={category.id}>
               <TableCell>
                 {editingCategory?.id === category.id ? (

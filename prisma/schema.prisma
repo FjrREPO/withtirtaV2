@@ -15,6 +15,7 @@ enum MediaType {
 model Category {
   id        String   @id @default(uuid())
   name      String   @unique
+  drivePath String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -34,4 +35,24 @@ model MediaItem {
 
   @@index([categoryId])
   @@index([type])
+}
+
+model Article {
+  id         String            @id @default(cuid())
+  title      String
+  content    String
+  author     String
+  thumbnail  String
+  published  Boolean           @default(false)
+  categories ArticleCategory[] @relation("ArticleCategories")
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+}
+
+model ArticleCategory {
+  id        String    @id @default(cuid())
+  name      String
+  articles  Article[] @relation("ArticleCategories")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }

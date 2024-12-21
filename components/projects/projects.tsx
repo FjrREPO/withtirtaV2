@@ -133,7 +133,7 @@ export const Projects: React.FC = () => {
       className={styles.projects}
     >
       <div className={styles.body}>
-        {mediaItems.slice(0, 5).map((project, index) => (
+        {mediaItems && mediaItems.length > 0 && mediaItems?.slice(0, 5).map((project, index) => (
           <Project
             index={index}
             title={project.name}
@@ -159,7 +159,7 @@ export const Projects: React.FC = () => {
             style={{ top: `${index * -100}%` }}
             className={styles.modalSlider}
           >
-            {mediaItems.slice(0, 5).map((project, index) => {
+            {mediaItems && mediaItems.length > 0 && mediaItems?.slice(0, 5).map((project, index) => {
               const generateRandomHexColor = (): string => {
                 return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
               };

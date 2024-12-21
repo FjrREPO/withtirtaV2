@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
 import { Syne } from "next/font/google"
 import "../../globals.css"
+import NavDashboard from '@/components/navbar/NavDashboard'
+import { TanstackProvider } from '@/components/providers/TanstackProvider'
 
 const syne = Syne({
     subsets: ["latin"],
@@ -34,14 +36,17 @@ export default function RootLayout({
                         syne.className
                     )}
                 >
-                    <ThemeProvider
-                        attribute="class"
-                        defaultTheme="system"
-                        enableSystem
-                        storageKey="theme-mode"
-                    >
-                        {children}
-                    </ThemeProvider>
+                    <TanstackProvider>
+                        <ThemeProvider
+                            attribute="class"
+                            defaultTheme="system"
+                            enableSystem
+                            storageKey="theme-mode"
+                        >
+                            <NavDashboard />
+                            {children}
+                        </ThemeProvider>
+                    </TanstackProvider>
                 </body>
             </html>
         </ClerkProvider>

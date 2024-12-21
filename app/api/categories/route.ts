@@ -20,6 +20,7 @@ export async function POST(request: Request) {
     const category = await prisma.category.create({
       data: {
         name: json.name,
+        drivePath: json.drivePath,
       },
     });
     return NextResponse.json(category);
