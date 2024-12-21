@@ -182,15 +182,15 @@ export default function NavMenu() {
               </div>
             </MagneticEffect>
             <SignedIn>
-              <MagneticEffect>
-                <Link
-                  href={"/admin"}
-                  className={"group"}
-                >
+              <Link
+                href={"/dashboard"}
+                className={"group"}
+              >
+                <MagneticEffect>
                   <p className="text-zinc-200 dark:text-zinc-800">Admin</p>
                   <div className="h-[2px] w-full origin-center -translate-y-2 scale-x-0 rounded-full bg-zinc-200 transition group-hover:translate-y-0 group-hover:scale-x-100 dark:bg-zinc-800" />
-                </Link>
-              </MagneticEffect>
+                </MagneticEffect>
+              </Link>
             </SignedIn>
           </div>
           <div className="flex px-[clamp(1.25rem,3vw,2.5rem)]">

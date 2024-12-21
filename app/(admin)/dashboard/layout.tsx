@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
 import { Syne } from "next/font/google"
 import "../../globals.css"
+import type { PropsWithChildren } from 'react'
+import { Protect } from '@clerk/nextjs'
 
 const syne = Syne({
     subsets: ["latin"],
@@ -40,7 +42,11 @@ export default function RootLayout({
                         enableSystem
                         storageKey="theme-mode"
                     >
-                        {children}
+                        <Protect
+                            condition={(has) => has({ role: 'org:admin' })}
+                        >
+                            {children}
+                        </Protect>
                     </ThemeProvider>
                 </body>
             </html>
