@@ -8,22 +8,20 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div className='min-h-screen'>
-      <div className="mx-auto py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          {stats.map((stat) => (
-            <Card key={stat.label}>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-500">
-                  {stat.label}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stat.value}</div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+    <div className="mx-auto py-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {stats.map((stat) => (
+          <Card key={stat.label}>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-500">
+                {stat.label}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stat.value}</div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   );

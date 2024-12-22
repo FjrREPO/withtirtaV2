@@ -7,8 +7,8 @@ import { motion } from "framer-motion";
 import gsap from "gsap";
 import Image from "next/image";
 import { RoundedButton } from "../../common/RoundedButton/rounded-button";
-import { MediaItem } from "@prisma/client";
 import Link from "next/link";
+import { MediaItemSchema } from "@/lib/validation/types";
 
 interface ModalState {
   active: boolean;
@@ -50,7 +50,7 @@ export const Projects: React.FC = () => {
   const xMoveCursorLabel = useRef<GSAPAnimation | null>(null);
   const yMoveCursorLabel = useRef<GSAPAnimation | null>(null);
 
-    const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
+    const [mediaItems, setMediaItems] = useState<MediaItemSchema[]>([]);
     
     const refreshData = async () => {
       const [mediaRes] = await Promise.all([
@@ -136,6 +136,7 @@ export const Projects: React.FC = () => {
         {mediaItems && mediaItems.length > 0 && mediaItems?.slice(0, 5).map((project, index) => (
           <Project
             index={index}
+            path={project.category.drivePath}
             title={project.name}
             manageModal={manageModal}
             key={index}

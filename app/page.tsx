@@ -1,6 +1,7 @@
 "use client"
 
 import About from "@/components/about/About"
+import Article from "@/components/article/Article"
 import Contact from "@/components/contact/Contact"
 import { Hero } from "@/components/hero/Hero"
 import { Landing } from "@/components/landing/landing"
@@ -14,6 +15,7 @@ export default function Home() {
       <main data-scroll-container className="flex flex-col items-center max-w-screen min-h-screen">
         <Hero />
         <About />
+        <Article />
         <Projects />
         <Contact />
       </main>

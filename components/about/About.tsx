@@ -18,7 +18,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative flex min-h-[50vh] my-10 w-full items-center justify-center overflow-hidden"
+      className="relative flex min-h-[30vh] mt-32 w-full items-center justify-center overflow-hidden"
     >
       <div className="mx-auto flex w-[90%] flex-col items-start justify-center lg:max-w-[1212.8px]">
         <div className="mb-10 flex w-full items-center justify-between gap-x-2 md:mb-16">

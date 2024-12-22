@@ -115,6 +115,14 @@ export default function NavMenu() {
           </MagneticEffect>
           <MagneticEffect>
             <NavMenuLink
+              title={"Articles"}
+              active={active}
+              duration={1}
+              handleScroll={() => handleScroll("#articles")}
+            />
+          </MagneticEffect>
+          <MagneticEffect>
+            <NavMenuLink
               title={"Projects"}
               active={active}
               duration={1.2}

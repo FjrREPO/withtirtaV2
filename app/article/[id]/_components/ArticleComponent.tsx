@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getArticle, getCategories } from "@/lib/api";
+import { ArticleSchema } from "@/lib/validation/types";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -15,19 +16,11 @@ type Props = {
 };
 
 export default function ArticleComponent({ id }: Props) {
-  const { data: article, isLoading } = useQuery({
-    queryKey: ["article"],
+  const { data: article, isLoading } = useQuery<ArticleSchema>({
+    queryKey: ["articleId", id],
     queryFn: () => getArticle(id),
   });
-
-  const { data: categories } = useQuery({
-    queryKey: ["categories"],
-    queryFn: getCategories,
-  });
-
-  const filteredCategories = article?.categoryIds?.map((categoryId: string) => {
-    return categories?.find((c: ArticleCategory) => c.id === categoryId);
-  });
+  
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto px-4">
@@ -69,7 +62,7 @@ export default function ArticleComponent({ id }: Props) {
 
         <SkeletonWrapper isLoading={isLoading}>
           <div className="flex flex-wrap gap-2">
-            {filteredCategories?.map((category: ArticleCategory) => (
+            {article?.categories?.map((category: { id: string, name: string }) => (
               <Badge key={category.id} variant="secondary" className="text-sm">
                 {category.name}
               </Badge>
@@ -80,7 +73,9 @@ export default function ArticleComponent({ id }: Props) {
         <SkeletonWrapper isLoading={isLoading}>
           <ScrollArea className="h-[400px] w-full rounded-md border p-4 shadow-sm bg-white">
             <div className="prose prose-sm text-gray-800">
-              {article?.content || "No content yet"}
+              <div className="prose prose-sm"
+                dangerouslySetInnerHTML={{ __html: article?.content || "No content yet" }}>
+              </div>
             </div>
           </ScrollArea>
         </SkeletonWrapper>

@@ -1,50 +1,25 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
-import { MediaType } from '@prisma/client';
 import CategoriesSection from './CategoriesSection';
 import MediaSection from './MediaSection';
-
-interface Category {
-  id: string;
-  name: string;
-  drivePath: string;
-  mediaItems: MediaItem[];
-}
-
-interface MediaItem {
-  id: string;
-  name: string;
-  type: MediaType;
-  filePath: string;
-  categoryId: string;
-  category: Category;
-}
+import { useQuery } from '@tanstack/react-query';
+import { getProjectCategories, getProjectMedias } from '@/lib/api';
+import { CategorySchema, MediaItemSchema } from '@/lib/validation/types';
 
 export default function MediaManagement() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
-  
-  const refreshData = async () => {
-    const [categoriesRes, mediaRes] = await Promise.all([
-      fetch('/api/categories'),
-      fetch('/api/media')
-    ]);
-    
-    const [categoriesData, mediaData] = await Promise.all([
-      categoriesRes.json(),
-      mediaRes.json()
-    ]);
-    
-    setCategories(categoriesData);
-    setMediaItems(mediaData);
-  };
+  const { data: cData, isLoading: cLoading, refetch: cRefetch } = useQuery<CategorySchema[]>({
+    queryKey: ['categories'],
+    queryFn: () => getProjectCategories()
+  });
 
-  useEffect(() => {
-    refreshData();
-  }, []);
+  const { data: mData, isLoading: mediaItemsLoading } = useQuery<MediaItemSchema[]>({
+    queryKey: ['media'],
+    queryFn: () => getProjectMedias()
+  });
+
+  const isLoading = cLoading || mediaItemsLoading;
 
   return (
     <Card className="p-6">
@@ -53,19 +28,21 @@ export default function MediaManagement() {
           <TabsTrigger value="categories">Categories</TabsTrigger>
           <TabsTrigger value="media">Media Items</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="categories">
           <CategoriesSection
-            categories={categories}
-            onDataChange={refreshData}
+            categories={cData || []}
+            onDataChange={cRefetch}
+            isLoading={cLoading}
           />
         </TabsContent>
-        
+
         <TabsContent value="media">
           <MediaSection
-            mediaItems={mediaItems || []}
-            categories={categories}
-            onDataChange={refreshData}
+            mediaItems={mData || []}
+            categories={cData || []}
+            onDataChange={cRefetch}
+            isLoading={isLoading}
           />
         </TabsContent>
       </Tabs>

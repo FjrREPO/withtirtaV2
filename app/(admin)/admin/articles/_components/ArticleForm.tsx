@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { createArticle, updateArticle, getCategories } from "@/lib/api";
@@ -37,47 +36,21 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
-
-interface Article {
-  id: string;
-  title: string;
-  content: string;
-  author: string;
-  thumbnail: string;
-  published: boolean;
-  categories: ArticleCategory[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface ArticleCategory {
-  id: string;
-  name: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface ArticleFormData {
-  title: string;
-  content: string;
-  author: string;
-  thumbnail: string;
-  published: boolean;
-  categoryIds: string[];
-}
+import { ArticleCategorySchema, ArticleSchema } from "@/lib/validation/types";
+import { useState } from "react";
+import { FroalaEditor } from "@/components/editor/froala-editor";
 
 interface ArticleFormProps {
   articleId?: string;
-  initialData?: Article;
+  initialData?: ArticleSchema;
 }
 
 export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const [activeTab, setActiveTab] = React.useState("edit");
+  const [activeTab, setActiveTab] = useState("edit");
 
   const { register, handleSubmit, watch, setValue, formState: { errors, isDirty } } =
     useForm<ArticleFormData>({
@@ -94,7 +67,7 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
       }
     });
 
-  const { data: categories, isLoading: categoriesLoading } = useQuery({
+  const { data: categories } = useQuery<ArticleCategorySchema[]>({
     queryKey: ["categories"],
     queryFn: getCategories,
   });
@@ -105,7 +78,7 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["articles"] });
       toast.success(`Article ${articleId ? "updated" : "created"} successfully`);
-      router.push("/admin/articles");
+      setTimeout(() => router.push("/admin/articles"), 2000);
     },
     onError: (error) => {
       toast.error("Failed to save article. Please try again.");
@@ -143,7 +116,7 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
 
           <div className="flex flex-wrap gap-2">
             {watchedValues.categoryIds.map((categoryId) => {
-              const category = categories?.find((c: ArticleCategory) => c.id === categoryId);
+              const category = categories?.find((c: ArticleCategorySchema) => c.id === categoryId);
               return category ? (
                 <Badge key={categoryId} variant="secondary">
                   {category.name}
@@ -152,11 +125,9 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
             })}
           </div>
 
-          <ScrollArea className="h-[400px] w-full rounded-md border p-4">
-            <div className="prose prose-sm">
-              {watchedValues.content || "No content yet"}
-            </div>
-          </ScrollArea>
+          <div className="prose prose-sm"
+            dangerouslySetInnerHTML={{ __html: watchedValues.content || "No content yet" }}>
+          </div>
         </div>
       </div>
     );
@@ -241,12 +212,10 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
 
                     <div className="space-y-2">
                       <Label htmlFor="content">Content</Label>
-                      <Textarea
-                        id="content"
-                        {...register("content", { required: "Content is required" })}
-                        rows={15}
-                        className={cn(errors.content && "border-red-500")}
-                        placeholder="Write your article content here..."
+                      <FroalaEditor
+                        value={watch("content")}
+                        onChange={(value) => setValue("content", value)}
+                        error={!!errors.content}
                       />
                       {errors.content && (
                         <span className="text-sm text-red-500">
@@ -267,8 +236,8 @@ export function ArticleForm({ articleId, initialData }: ArticleFormProps) {
 
                   <div className="space-y-4">
                     <Label className="text-lg font-semibold">Categories</Label>
-                    <div className="grid grid-cols-3 gap-4">
-                      {categories?.map((category: ArticleCategory) => {
+                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-4">
+                      {categories?.map((category: ArticleCategorySchema) => {
                         const isChecked = watchedValues.categoryIds.includes(category.id);
 
                         return (

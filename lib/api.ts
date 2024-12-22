@@ -49,3 +49,15 @@ export async function getCategory(id: string) {
   if (!response.ok) throw new Error('Failed to fetch category');
   return response.json();
 }
+
+export async function getProjectCategories() {
+  const response = await fetch('/api/categories');
+  if (!response.ok) throw new Error('Failed to fetch categories');
+  return response.json();
+}
+
+export async function getProjectMedias() {
+  const response = await fetch('/api/media');
+  if (!response.ok) throw new Error('Failed to fetch projects');
+  return response.json();
+}

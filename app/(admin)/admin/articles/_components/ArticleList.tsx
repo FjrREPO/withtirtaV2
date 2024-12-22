@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getArticles, deleteArticle } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { ArticleSchema } from '@/lib/validation/types';
 
 export function ArticleList() {
   const queryClient = useQueryClient();
@@ -12,6 +13,8 @@ export function ArticleList() {
     queryKey: ['articles'],
     queryFn: getArticles,
   });
+
+  console.log("articles", articles);
 
   const deleteMutation = useMutation({
     mutationFn: deleteArticle,
@@ -33,7 +36,7 @@ export function ArticleList() {
         </Link>
       </div>
       <div className="grid gap-4">
-        {articles?.map((article: Article) => (
+        {articles?.map((article: ArticleSchema) => (
           <div key={article.id} className="border p-4 rounded-lg">
             <div className="flex justify-between items-start">
               <div>

@@ -30,29 +30,16 @@ import { Pencil, Trash2 } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import Image from 'next/image';
 import Link from 'next/link';
-
-interface Category {
-  id: string;
-  name: string;
-  drivePath: string;
-}
-
-interface MediaItem {
-  id: string;
-  name: string;
-  type: MediaType;
-  filePath: string;
-  categoryId: string;
-  category: Category;
-}
+import { CategorySchema, MediaItemSchema } from '@/lib/validation/types';
 
 interface MediaSectionProps {
-  mediaItems: MediaItem[];
-  categories: Category[];
-  onDataChange: () => Promise<void>;
+  mediaItems: MediaItemSchema[];
+  categories: CategorySchema[];
+  onDataChange: () => void;
+  isLoading: boolean;
 }
 
-export default function MediaSection({ mediaItems, categories, onDataChange }: MediaSectionProps) {
+export default function MediaSection({ mediaItems, categories, onDataChange, isLoading }: MediaSectionProps) {
   const [newMediaItem, setNewMediaItem] = useState<{
     name: string;
     type: MediaType;
@@ -65,7 +52,7 @@ export default function MediaSection({ mediaItems, categories, onDataChange }: M
     categoryId: "",
   });
 
-  const [editingItem, setEditingItem] = useState<MediaItem | null>(null);
+  const [editingItem, setEditingItem] = useState<MediaItemSchema | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const addMediaItem = async () => {
@@ -116,7 +103,7 @@ export default function MediaSection({ mediaItems, categories, onDataChange }: M
     }
   };
 
-  const handleEdit = (item: MediaItem) => {
+  const handleEdit = (item: MediaItemSchema) => {
     setEditingItem(item);
     setIsEditDialogOpen(true);
   };
@@ -160,7 +147,7 @@ export default function MediaSection({ mediaItems, categories, onDataChange }: M
             ))}
           </SelectContent>
         </Select>
-        <Button onClick={addMediaItem}>Add Media Item</Button>
+        <Button onClick={addMediaItem} disabled={isLoading}>Add Media Item</Button>
       </div>
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>

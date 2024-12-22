@@ -12,23 +12,18 @@ import {
 import { toast } from 'sonner';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Pencil, Trash2 } from 'lucide-react';
-
-interface Category {
-  id: string;
-  name: string;
-  drivePath: string;
-  mediaItems: any[];
-}
+import { CategorySchema } from '@/lib/validation/types';
 
 interface CategoriesSectionProps {
-  categories: Category[];
-  onDataChange: () => Promise<void>;
+  categories: CategorySchema[];
+  onDataChange: () => void;
+  isLoading: boolean;
 }
 
-export default function CategoriesSection({ categories, onDataChange }: CategoriesSectionProps) {
+export default function CategoriesSection({ categories, onDataChange, isLoading }: CategoriesSectionProps) {
   const [newCategory, setNewCategory] = useState("");
   const [drivePath, setDrivePath] = useState("");
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [editingCategory, setEditingCategory] = useState<CategorySchema | null>(null);
 
   const addCategory = async () => {
     try {
@@ -84,7 +79,7 @@ export default function CategoriesSection({ categories, onDataChange }: Categori
           onChange={(e) => setDrivePath(e.target.value)}
           placeholder="Drive path"
         />
-        <Button onClick={addCategory}>Add Category</Button>
+        <Button onClick={addCategory} disabled={isLoading}>Add Category</Button>
       </div>
 
       <Table>
@@ -111,11 +106,11 @@ export default function CategoriesSection({ categories, onDataChange }: Categori
                   category.name
                 )}
               </TableCell>
-              <TableCell>{category.mediaItems.length}</TableCell>
+              <TableCell>{category && category.mediaItems.length}</TableCell>
               <TableCell className="flex gap-2">
                 {editingCategory?.id === category.id ? (
                   <>
-                    <Button onClick={() => updateCategory(category.id, editingCategory.name)}>
+                    <Button onClick={() => updateCategory(category.id, editingCategory.name)} disabled={isLoading}>
                       Save
                     </Button>
                     <Button variant="secondary" onClick={() => setEditingCategory(null)}>
